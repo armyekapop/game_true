@@ -19,15 +19,17 @@ Enemy::~Enemy()
 {
 }
 
-void Enemy::update1(float deltaTime)
+void Enemy::update1(float deltaTime, bool checkpause, bool end)
 {
-    animation.updatestar(row, deltaTime);
-    body.setTextureRect(animation.uvRect);
-
+    if (checkpause != false && end != false)
+    {
+        animation.updatestar(row, deltaTime);
+        body.setTextureRect(animation.uvRect);
+    }
     
 }
 
-void Enemy::update2(float deltaTime, Player player,bool checkpause,bool end,bool faceright)
+void Enemy::update2(float deltaTime, Player player,bool checkpause,bool end)
 {
     
     if (body.getPosition().x >= -150.0f && checkpause == false && end == false)
@@ -41,10 +43,7 @@ void Enemy::update2(float deltaTime, Player player,bool checkpause,bool end,bool
             x1 += 10;
             body.setPosition(-100.0f, 350.0f);
         }
-        if (faceright == true)
-        {
-
-        }
+        
         animation.updatestar(row, deltaTime);
         body.setTextureRect(animation.uvRect);
         
@@ -53,6 +52,33 @@ void Enemy::update2(float deltaTime, Player player,bool checkpause,bool end,bool
         velocity.x = 1;
         velocity.y = 1;
 }
+
+void Enemy::update3(float deltaTime, Player player, bool checkpause, bool end)
+{
+
+    if (body.getPosition().x <= 1200.0f && checkpause == false && end == false)
+    {
+        velocity.x = -150;
+        velocity.y = 1;
+
+        body.move(-velocity.x * deltaTime, velocity.y * deltaTime);
+        if (player.GetCollider().CheckCollision(this->GetCollider()))
+        {
+            x1 += 10;
+            body.setPosition(-100.0f, 350.0f);
+        }
+
+        animation.updatestar(row, deltaTime);
+        body.setTextureRect(animation.uvRect);
+
+    }
+    else
+        velocity.x = 1;
+        velocity.y = 1;
+}
+
+
+
 
 void Enemy::updateamong1(float deltaTime, Bullet bullet1)
 {

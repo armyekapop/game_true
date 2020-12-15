@@ -9,10 +9,12 @@
 class Enemy
 {
 public:
-    Enemy(sf::Texture* texture, sf::Vector2u imageCount, float switchTime, float h, float w, float x, float y,bool faceright);
+    Enemy(sf::Texture* texture, sf::Vector2u imageCount, float switchTime, float h, float w, float x, float y);
     ~Enemy();
-    void update1(float deltaTime);
-    void update2(float deltaTime, Player player, bool checkpause, bool end,bool faceright);
+    void update1(float deltaTime, bool checkpause, bool end);
+    void update2(float deltaTime, Player player, bool checkpause, bool end);
+    void update3(float deltaTime, Player player, bool checkpause, bool end);
+
     void updateamong1(float deltaTime, Bullet bullet1);
     void updateamong2(float deltaTime, Player player);
     void draw(sf::RenderWindow& window);

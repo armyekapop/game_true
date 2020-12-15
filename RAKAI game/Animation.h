@@ -9,7 +9,7 @@ public:
 
 	void update(int row, float deltaTime, bool faceRight);
 	void updateBu(int row, float deltaTime);
-	void updatestar(int row, float deltaTime, bool checkright);
+	void updatestar(int row, float deltaTime);
 	void updateItemBloodup(int row, float deltaTime);
 
 public:

@@ -247,6 +247,7 @@ int main()
 	sp.setTexture(&keySP);
 
 	//endscore
+	int realscore = 0;
 	int EndScore = 0;
 	sf::Text Send;
 	Send.setCharacterSize(40);
@@ -341,8 +342,22 @@ int main()
 
 
 	sf::Texture alien;
-	alien.loadFromFile("a/shark.png");
+	alien.loadFromFile("a/shark2.png");
 	std::vector <Enemy> alienVector;
+
+	sf::Texture alien1;
+	alien1.loadFromFile("a/shark.png");
+	std::vector <Enemy> alien1Vector;
+
+	sf::Texture fish1;
+	fish1.loadFromFile("a/fish1f.png");
+	std::vector <Enemy> fish1Vector;
+
+	sf::Texture fish2;
+	fish2.loadFromFile("a/fish2.png");
+	std::vector <Enemy> fish2Vector;
+
+
 
 	int i = 0;
 	int q = 0;
@@ -359,6 +374,9 @@ int main()
 	float countTimeBul1 = 0;
 	float countTimeBul2 = 0;
 	float countTimex2 = 0;
+	
+
+	float aww = 0;
 
 	sf::Clock clock;
 	sf::Clock timerpausemenu;
@@ -389,6 +407,9 @@ int main()
 
 	float spawnTimerMax = 100.f;
 	float spawnTimer = spawnTimerMax;
+	float spawnTimer1 = spawnTimerMax;
+	float spawnTimer2 = spawnTimerMax;
+	float spawnTimer3 = spawnTimerMax;
 
 	std::map<int, std::string> keepscore;
 	std::ifstream fileReader;
@@ -617,7 +638,7 @@ int main()
 		
 
 		while (START == true) {
-
+			
 			//std::cout << "player pos :" << player.GetPosition().y << std::endl;
 			music.pause();
 			slide = false;
@@ -641,14 +662,32 @@ int main()
 					break;
 				}
 			}
-			spawnTimer += 0.1f;
+			spawnTimer += 0.05f;
 			if (spawnTimer >= spawnTimerMax && endGame == false && checkpause == false)
 			{
-				alienVector.push_back(Enemy(&alien, sf::Vector2u(2, 3), 0.3f,130.0f, 85.33f, 1100.0f, rand() % 690 + 20.0f));
+				alienVector.push_back(Enemy(&alien, sf::Vector2u(2, 3), 0.3f,130.0f, 85.33f, 1100.0f, rand() % 680 + 150.0f));
 				spawnTimer = 0.f;
 			}
+			spawnTimer1 += 0.045f;
+			if (spawnTimer1 >= spawnTimerMax && endGame == false && checkpause == false)
+			{
+				alien1Vector.push_back(Enemy(&alien1, sf::Vector2u(2, 3), 0.3f, 130.0f, 85.33f, 70.0f, rand() % 680 + 150.0f));
+				spawnTimer1 = 0.f;
+			}
+			spawnTimer2 += 0.05f;
+			if (spawnTimer2 >= spawnTimerMax && endGame == false && checkpause == false)
+			{
+				fish1Vector.push_back(Enemy(&fish1, sf::Vector2u(4, 3), 0.3f, 105.0f, 65.33f, 70.0f, rand() % 680 + 150.0f));
+				spawnTimer2 = 0.f;
+			}
+			spawnTimer3 += 0.04f;
+			if (spawnTimer3 >= spawnTimerMax && endGame == false && checkpause == false)
+			{
+				fish2Vector.push_back(Enemy(&fish2, sf::Vector2u(4, 3), 0.3f, 105.0f, 65.33f, 1100.0f, rand() % 680 + 150.0f));
+				spawnTimer3 = 0.f;
+			}
 
-
+			
 			//Star
 			for (int i = 0; i < starVector.size(); i++) {
 				starVector[i]->update(deltaTime);
@@ -665,17 +704,39 @@ int main()
 			for (int i = 0; i < X2Vector.size(); i++) {
 				X2Vector[i].update(deltaTime);
 			}
+
 			//Alien
 			for (int i = 0; i < alienVector.size(); i++) {
-				alienVector[i].update1(deltaTime);
+				alienVector[i].update1(deltaTime, checkpause, endGame);
 				if (checkpause == false) {
 					alienVector[i].update2(deltaTime, player, checkpause,endGame);
 				}
 			}
 
+			for (int i = 0; i < alien1Vector.size(); i++) {
+				alien1Vector[i].update1(deltaTime, checkpause, endGame);
+				if (checkpause == false) {
+					alien1Vector[i].update3(deltaTime, player, checkpause, endGame);
+				}
+			}
+
+			for (int i = 0; i < fish1Vector.size(); i++) {
+				fish1Vector[i].update1(deltaTime, checkpause, endGame);
+				if (checkpause == false) {
+					fish1Vector[i].update3(deltaTime, player, checkpause, endGame);
+				}
+			}
+			for (int i = 0; i < fish2Vector.size(); i++) {
+				fish2Vector[i].update1(deltaTime, checkpause, endGame);
+				if (checkpause == false) {
+					fish2Vector[i].update2(deltaTime, player, checkpause, endGame);
+				}
+			}
+			
+
 			score1.str(" ");
-			score1 << "SCORE :  " << int(pos.x - 200);
-			EndScore = int(pos.x - 200);
+			score1 << "SCORE :  " << realscore;
+			EndScore = realscore;
 			scoregame.setPosition({ 40,30 });
 			scoregame.setString(score1.str());
 
@@ -716,12 +777,49 @@ int main()
 
 			for (i = 0; i < alienVector.size(); i++) {
 				if (alienVector[i].colAlien() == 2) {
-					MyHP -= 10000;
+					MyHP -= 5000;
 					HP.setSize(sf::Vector2f(MyHP / 200.0f, 30));
 					checkcoli = true;
 					q = 0;
 				}
 			}
+
+			for (i = 0; i < alien1Vector.size(); i++) {
+				if (alien1Vector[i].colAlien() == 2) {
+					MyHP -= 5000;
+					HP.setSize(sf::Vector2f(MyHP / 200.0f, 30));
+					checkcoli = true;
+					q = 0;
+				}
+			}
+
+			for (i = 0; i < fish1Vector.size(); i++) {
+				if (fish1Vector[i].colAlien() == 2) {
+					MyHP += 10000;
+					if (MyHP >= 78000)
+					{
+						MyHP = 78000;
+					}
+					realscore += 500;
+					HP.setSize(sf::Vector2f(MyHP / 200.0f, 30));
+					checkcoli = true;
+					q = 0;
+				}
+			}
+			for (i = 0; i < fish2Vector.size(); i++) {
+				if (fish2Vector[i].colAlien() == 2) {
+					MyHP += 10000;
+					if (MyHP >= 78000)
+					{
+						MyHP = 78000;
+					}
+					realscore += 500;
+					HP.setSize(sf::Vector2f(MyHP / 200.0f, 30));
+					checkcoli = true;
+					q = 0;
+				}
+			}
+			
 
 			//Bloodup
 			for (i = 0; i < BloodupVector.size(); i++) {
@@ -824,6 +922,16 @@ int main()
 				alienVector[i].draw(window);
 			}
 
+			for (int i = 0; i < alien1Vector.size(); i++) {
+				alien1Vector[i].draw(window);
+			}
+			for (int i = 0; i < fish1Vector.size(); i++) {
+				fish1Vector[i].draw(window);
+			}
+			for (int i = 0; i < fish2Vector.size(); i++) {
+				fish2Vector[i].draw(window);
+			}
+
 			for (int i = 0; i < starVector.size(); i++) {
 				starVector[i]->draw(window);
 			}
@@ -915,7 +1023,13 @@ int main()
 			}
 
 			if (checkpause == false) {
-				MyHP -= 5;
+				
+				aww += 0.001;
+				if (aww >= 20)
+				{
+					aww = 5;
+				}
+				MyHP -= 5+aww;
 			}
 			if (MyHP < 78000) {
 				HP.setSize(sf::Vector2f(MyHP / 200.0f, 30));
@@ -932,8 +1046,7 @@ int main()
 				window.draw(ee);
 				NewScore.setPosition(500, 355);
 				window.draw(NewScore);
-
-
+				
 				//cout << sf::Mouse::getPosition(window).x << " " << sf::Mouse::getPosition(window).y  << endl;
 				if (sf::Mouse::getPosition(window).x >= 400 &&
 					sf::Mouse::getPosition(window).y >= 600 &&
@@ -981,6 +1094,8 @@ int main()
 						ll.setPosition(view.getCenter().x - 540, 0.0f);
 						LL.setPosition(view.getCenter().x - 540, 0.0f);
 						DL.setPosition(view.getCenter().x - 255, 647.5f);
+						realscore = 0;
+						aww = 0;
 					}
 				}
 			}
@@ -1045,7 +1160,7 @@ int main()
 	
 			window.display();
 		}
-
+		
 		countloop++;
 		endGame = false;
 		player.SetPosition(200, 520);
@@ -1055,6 +1170,23 @@ int main()
 			alienVector.erase(alienVector.begin() + i);
 		}
 		alienVector.clear();
+
+		for (int i = 0; i < alien1Vector.size(); i++) {
+			alien1Vector.erase(alien1Vector.begin() + i);
+		}
+		alien1Vector.clear();
+
+		for (int i = 0; i < fish1Vector.size(); i++) {
+			fish1Vector.erase(fish1Vector.begin() + i);
+		}
+		fish1Vector.clear();
+
+		for (int i = 0; i < fish2Vector.size(); i++) {
+			fish2Vector.erase(fish2Vector.begin() + i);
+		}
+		fish2Vector.clear();
+
+		
 
 		for (int i = 0; i < starVector.size(); i++) {
 			starVector.erase(starVector.begin() + i);

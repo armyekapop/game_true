@@ -38,7 +38,7 @@ void Animation::update(int row, float deltaTime, bool faceRight)
     }
     else
     {
-        uvRect.left = (currentImage.x + 1) * abs(uvRect.width);;
+        uvRect.left = (currentImage.x +1)* abs(uvRect.width);;
         uvRect.width = -abs(uvRect.width);
     }
 }
@@ -62,7 +62,7 @@ void Animation::updateBu(int row, float deltaTime)
     uvRect.top = currentImage.y * uvRect.height;
 }
 
-void Animation::updatestar(int row, float deltaTime ,bool checkright)
+void Animation::updatestar(int row, float deltaTime)
 {
     currentImage.y = row;
     totalTime += deltaTime;
